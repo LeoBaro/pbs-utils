@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: pbs-utils
+Version: 0.0.1
+Author-email: Leonardo Baroncelli <leonardo.baroncelli26@gmail.com>
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pytest
+
+# pbs_utils
