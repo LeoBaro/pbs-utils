@@ -1,19 +1,23 @@
-[build-system]
-requires=["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
 [project]
-name = "pbs-utils"
-version = "0.0.1"
+name = "pbs_utils"
+version = "0.0.1.2"
 authors = [
 	{name="Leonardo Baroncelli", email="leonardo.baroncelli26@gmail.com"}
 ]
-description = ""
+description = "A python decorator to easily submit a python script to pbs"
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3"
 ]
-dependencies = [
-    "pytest"
-]
+dependencies = []
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.urls]
+"Homepage" = "https://github.com/LeoBaro/pbs-utils"
+"Bug Reports" = "https://github.com/LeoBaro/pbs-utils/issues"
+
+[build-system]
+requires=["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

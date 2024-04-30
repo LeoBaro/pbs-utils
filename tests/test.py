@@ -2,7 +2,7 @@ import pytest
 import argparse
 from pathlib import Path
 from subprocess import call
-from as_pbs_job import (
+from pbs_utils.as_pbs_job import (
     optional_args_map,
     required_args,
     _prepare_sh_script_for_pbs,
@@ -37,7 +37,7 @@ def test_prepare_sh_script_for_pbs():
         "ngpus": 4,
         "ncpus": 24,
         "walltime_h": 72,
-        "modules_to_load": ["proxy", "anaconda3"],
+        "modules_to_load": ["proxy"],
         "virtual_env_path": None,
         "anaconda_env_name": "test-env",
         "pbs_script_path": "./here",
@@ -59,7 +59,8 @@ def test_prepare_sh_script_for_pbs():
 #PBS -j eo
 #PBS -q gpu -l select=1:ngpus=4:ncpus=24,walltime=72:00:00
 module load proxy
-module load anaconda3
+CONDA_BASE_DIR=$(dirname $(dirname "$CONDA_EXE"))
+source "$CONDA_BASE_DIR/etc/profile.d/conda.sh"
 source activate test-env
 python {function_script_path} --arg 42"""
 
@@ -68,19 +69,19 @@ python {function_script_path} --arg 42"""
 def test_submission():
     py_script = """
 import argparse
-from pbs import pbs_job
+from pbs_utils import as_pbs_job
 def cli():
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--arg", type=int, required=True, help="")
     return parser.parse_args()
-@pbs_job({
+@as_pbs_job({
     "job_name": "test_job",
     "merge_stdout_stderr": True,
     "queue": "gpu",
     "ngpus": 4,
     "ncpus": 4,
     "walltime_h": 72,
-    "modules_to_load": ["anaconda3", "proxy"],
+    "modules_to_load": ["proxy"],
     "virtual_env_path": None,
     "anaconda_env_name": None,
     "pbs_script_path": None,
@@ -94,4 +95,4 @@ if __name__=='__main__':
     script_path = Path("/tmp") / "py_script.py"
     with open(script_path, "w") as ps:
         ps.write(py_script)
-    call(f"python {script_path}", shell=True)
+    call(f"python {script_path} -a 42", shell=True)

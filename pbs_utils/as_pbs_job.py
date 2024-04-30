@@ -95,6 +95,8 @@ def _add_virtualenv_activation(sh_script_str: str, pbs_args: dict):
     if pbs_args['virtual_env_path']:
         sh_script_str += f"\nsource {pbs_args['virtual_env_path']}/bin/activate"
     if pbs_args['anaconda_env_name']:
+        sh_script_str += f"\nCONDA_BASE_DIR=$(dirname $(dirname \"$CONDA_EXE\"))"
+        sh_script_str += f"\nsource \"$CONDA_BASE_DIR/etc/profile.d/conda.sh\""
         sh_script_str += f"\nsource activate {pbs_args['anaconda_env_name']}"
     return sh_script_str
 
